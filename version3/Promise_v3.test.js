@@ -1,6 +1,6 @@
-const Promise  = require('./Promise_v1.js')
+const Promise  = require('./Promise_v3.js')
 
-describe('v1', () => {
+describe('v3', () => {
     test('test1', () => {
         const promise = new Promise((resolve, reject) => {
             resolve('data')
@@ -22,9 +22,6 @@ describe('v1', () => {
         })
 
         promise.then(val => {
-            // 正常情况下 会在2s后输出 data，但确并未输出，而且都不会执行这段代码
-            // 因为 v1 版本的then 都是同步代码，当进入then时，state还处于 pending状态, 所以 onFulfilled 和 onRejected 两个函数都不会执行
-            console.log(val)
             result = val
         }, err => {
             console.log(err)
@@ -33,6 +30,21 @@ describe('v1', () => {
             expect(result).toEqual('data')
             done()
         }, 3000)
+    })
+
+    test('test3', (done) => {
+        const log = jest.fn();
+        const promise = new Promise((resolve, reject) => {
+            resolve('data')
+        })
+        promise.then(val => {
+            log('第二次调用')
+            result = val
+            expect(log).toHaveBeenCalledTimes(2)
+            done()
+        })
+        log('第一次调用')
+        expect(log).toHaveBeenCalledTimes(1)
     })
 })
 
