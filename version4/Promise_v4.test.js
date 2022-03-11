@@ -1,6 +1,6 @@
-const Promise  = require('./Promise_v3.js')
+const Promise  = require('./Promise_v4.js')
 
-describe('v3', () => {
+describe('v4', () => {
     test('test1', () => {
         const promise = new Promise((resolve, reject) => {
             resolve('data')
@@ -47,6 +47,7 @@ describe('v3', () => {
         expect(log).toHaveBeenCalledTimes(1)
     })
 
+    // 多个 then
     test('test4', (done) => {
         const log = jest.fn();
         const promise = new Promise((resolve, reject) => {
