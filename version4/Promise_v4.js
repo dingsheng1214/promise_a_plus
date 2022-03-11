@@ -32,7 +32,11 @@ function Promise(executor) {
         })
     }
 
-    executor(resolve, reject)
+    try {
+        executor(resolve, reject)
+    } catch (e) {
+        reject(e)
+    }
 }
 
 // A promise must provide a then method to access its current or eventual value or reason
