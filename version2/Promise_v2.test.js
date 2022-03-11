@@ -1,6 +1,6 @@
-const Promise  = require('./Promise_v1.js')
+const Promise  = require('./Promise_v2.js')
 
-test('promise_v1_test1', () => {
+test('promise_v2_test1', () => {
     const promise = new Promise((resolve, reject) => {
         resolve('data')
         reject('error')
@@ -12,7 +12,7 @@ test('promise_v1_test1', () => {
     })
 })
 
-test('promise_v1_test2', (done) => {
+test('promise_v2_test2', (done) => {
     let result = 'init'
     const promise = new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -21,8 +21,6 @@ test('promise_v1_test2', (done) => {
     })
 
     promise.then(val => {
-        // 正常情况下 会在2s后输出 data，但确并未输出，而且都不会执行这段代码
-        // 因为 v1 版本的then 都是同步代码，当进入then时，state还处于 pending状态, 所以 onFulfilled 和 onRejected 两个函数都不会执行
         console.log(val)
         result = val
     }, err => {
@@ -32,4 +30,18 @@ test('promise_v1_test2', (done) => {
         expect(result).toEqual('data')
         done()
     }, 3000)
+})
+
+test('promise_v2_test3', (done) => {
+    let result
+    const promise = new Promise((resolve, reject) => {
+        resolve('data')
+    })
+    promise.then(val => {
+        result = val
+    })
+    result = 1
+
+    // 预期是 先执行 reslut = 1 然后再执行 result = val, 事实却相反
+    expect(result).toEqual('data')
 })
